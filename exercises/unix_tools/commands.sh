@@ -31,4 +31,24 @@ paste ../data/nyt.words ../data/nyt.nextwords ../data/nyt.nextnextwords > ../dat
 cat ../data/nyt.trigrams | tr '[:upper:]' '[:lower:]' | sort | uniq -c | sort -rn | head -n 10
 
 # grep and wc
-# TODO
+
+# how many all uppercase words are there in this NYT file?
+egrep '^[A-Z]+$' data/nyt.words | wc -l
+
+# how many four letter words?
+egrep '^\w{4}$' data/nyt.words | wc -l
+
+# how many different words are there with no vowels
+egrep -v '[AEIOUaeiou]' data/nyt.words | sort | uniq | wc -l
+
+# how many one syllable words are there?
+tr '[:upper:]' '[:lower:]' < data/nyt.words | egrep '^[^aeiouAEIOU]*[aeiouAEIOU]+[^aeiouAEIOU]*$' data/nyt.words | uniq | wc -l
+
+# sed exercises
+
+# Count frequency of word initial consonant sequences
+tr '[:upper:]' '[:lower:]' < data/nyt.words | sed 's/[aeiouAEIOU].*$//' data/nyt.words | sort | uniq -c
+
+# Count word final consonant sequences
+tr '[:upper:]' '[:lower:]' < data/nyt.words | sed 's/^.*[aeiou]//g' data/nyt.words | sort | uniq -c | sort -rn | less
+
